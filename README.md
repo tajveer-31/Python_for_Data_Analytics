@@ -1,2 +1,104 @@
-# Python_for_Data_Analytics
-This includes all my projects on data related problems and providing solutions for the same through my analytic skills.
+# Overview
+
+Welcome to my analysis of job markets around the globe, focusing on data roles. This project was created out of desire to understand the job markets around the world more effectively.
+
+The data sourced from [Luke Barousse's Python Course](https://lukebarousse.com/python) which provides a foundation for my analysis, containing detailed information on job titles, salaries, locations, and essential skills. Through a series of Python scripts, I explore key questions such as:
+The most demanded skills, salary trends, and the intersection of demand and salary in data analytics.
+
+
+# Tools I Used
+
+For my deep dive into the data analyst job market, I harnessed the power of several key tools:
+
+- **Python:** The backbone of my analysis, allowing me to analyze the data and find critical insights.I also used the following Python libraries:
+    - **Pandas Library:** This was used to analyze the data. 
+    - **Matplotlib Library:** I visualized the data.
+    - **Seaborn Library:** Helped me create more advanced visuals. 
+- **Jupyter Notebooks:** The tool I used to run my Python scripts which let me easily include my notes and analysis.
+- **Visual Studio Code:** My go-to for executing my Python scripts.
+- **Git & GitHub:** Essential for version control and sharing my Python code and analysis, ensuring collaboration and project tracking.
+
+
+# The Questions
+
+Below are the questions I want to answer in my project:
+
+1. What are the skills most in demand for the top 3 most popular data roles?
+2. How are in-demand skills trending for Data Analysts?
+3. How well do jobs and skills pay for Data Analysts?
+4. What are the optimal skills for data analysts to learn? (High Demand AND High Paying) 
+
+
+# Data Preparation and Cleanup
+
+This section outlines the steps taken to prepare the data for analysis, ensuring accuracy and usability.
+
+## Import & Clean Up Data
+
+I start by importing necessary libraries and loading the dataset, followed by initial data cleaning tasks to ensure data quality.
+
+```python 
+# Importing Libraries
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import ast
+import numpy as np 
+import seaborn as sns
+
+
+# Loading Data
+dataset = pd.read_csv('/Users/tajveer/Downloads/data_jobs.csv')
+df = pd.DataFrame(dataset)
+df['job_posted_date']= pd.to_datetime(df['job_posted_date'])
+
+
+# Data Cleanup
+df['job_skills'] = df['job_skills'].apply(lambda skill_list: ast.literal_eval(skill_list)if pd.notna(skill_list) else skill_list)
+df['job_posted_date']= pd.to_datetime(df['job_posted_date'])
+
+```
+## Filter US Jobs
+
+To focus my analysis on the U.S. job market, I apply filters to the dataset, narrowing down to roles based in the United States.
+
+```python
+df_US = df[df['job_country'] == 'United States']
+
+```
+
+# The Analysis
+
+Each Jupyter notebook for this project aimed at investigating specific aspects of the data job market. Here’s how I approached each question:
+
+## 1. What are the most demanded skills for the top 3 most popular data roles?
+
+To find the most demanded skills for the top 3 most popular data roles. I filtered out those positions by which ones were the most popular, and got the top 5 skills for these top 3 roles. This query highlights the most popular job titles and their top skills, showing which skills I should pay attention to depending on the role I'm targeting. 
+
+View my notebook with detailed steps here: [Skill_count](Skill_count.ipynb).
+
+
+### Visualize Data
+
+```python
+fig, ax = plt.subplots(len(job_titles), 1)
+
+
+for i, job_title in enumerate(job_titles):
+    df_plot = df_skills_perc[df_skills_perc['job_title_short'] == job_title].head(5)[::-1]
+    sns.barplot(data=df_plot, x='skill_percent', y='job_skills', ax=ax[i], hue='skill_count', palette='dark:b_r')
+
+plt.show()
+```
+
+### Results
+
+![alt text](../US.png)
+
+*Bar graph visualizing the salary for the top 3 data roles and their top 5 skills associated with each.*
+
+### Insights:
+- SQL is the most requested skill for Data Analysts and Data Scientists, with it in over half the job postings for both roles. For Data Engineers, Python is the most sought-after skill, appearing in 68% of job postings.
+
+- Data Engineers require more specialized technical skills (AWS, Azure, Spark) compared to Data Analysts and Data Scientists who are expected to be proficient in more general data management and analysis tools (Excel, Tableau).
+
+- Python is a versatile skill, highly demanded across all three roles, but most prominently for Data Scientists (72%) and Data Engineers (65%).
